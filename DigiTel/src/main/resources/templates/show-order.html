@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Order Details</title>
+    <link rel="stylesheet" type="text/css" href="/styles_1.css">
+</head>
+<body>
+<section id="Headings" class="contained2">
+    <header class="header2">
+        <h1 class="text-center">DigiTel Business</h1>
+    </header>
+</section>
+
+<section class="contained2">
+    <div class="row-text">
+        <div class="col-xs-10 col-xs-offset-1">
+    <!--use th:text to dynamically replace the placeholder text with data from order -->
+    <h1>Welcome <span th:text="${order.firstname}">User</span>.</h1>
+    <h2>Your Order details are as follows:</h2>
+    <p>Email Address: <span th:text="${order.email}">email@example.com</span></p>
+    <p>Phone Number: <span th:text="${order.phone}">000-000-0000</span></p>
+    <p>Address: <span th:text="${order.address}">Address</span></p>
+
+    <h2>Phone Details:</h2>
+    <p>Phone Brand: <span th:text="${order.brand}">Brand</span></p>
+    <p>Phone Model: <span th:text="${order.model}">Model</span></p>
+    <p>Product Number: <span th:text="${order.productnum}">Product Number</span></p>
+    <p>Quantity: <span th:text="${order.quantity}">1</span></p>
+    <h3>Total: <span th:text="'CAD ' + ${order.calculateTotal()}">Total</span></h3>
+</div>
+    </div>
+</section>
+</body>
+</html>
