@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Sensor</title>
+</head>
+<body>
+<h1>Add Sensor</h1>
+<form action="#" th:action="@{/sensors/add}" th:object="${sensor}" method="post">
+    <label for="sensorName">Sensor Name</label>
+    <input type="text" th:field="*{sensorName}" id="sensorName" placeholder="Sensor Name" />
+    <span th:if="${#fields.hasErrors('sensorName')}" th:errors="*{sensorName}"></span>
+    <br/>
+
+    <label for="sensorType">Sensor Type</label>
+    <input type="text" th:field="*{sensorType}" id="sensorType" placeholder="Sensor Type" />
+    <span th:if="${#fields.hasErrors('sensorType')}" th:errors="*{sensorType}"></span>
+    <br/>
+
+    <label for="sensorPin">Sensor Pin</label>
+    <input type="number" th:field="*{sensorPin}" id="sensorPin" placeholder="Sensor Pin" />
+    <span th:if="${#fields.hasErrors('sensorPin')}" th:errors="*{sensorPin}"></span>
+    <br/>
+
+    <label for="sensorLocation">Sensor Location (optional)</label>
+    <input type="text" th:field="*{sensorLocation}" id="sensorLocation" placeholder="Sensor Location" />
+    <br/>
+
+    <label for="sensorStatus">Sensor Status</label>
+    <select th:field="*{sensorStatus}" id="sensorStatus">
+        <option value="">Select Status</option>
+        <option value="ON">ON</option>
+        <option value="OFF">OFF</option>
+    </select>
+    <span th:if="${#fields.hasErrors('sensorStatus')}" th:errors="*{sensorStatus}"></span>
+    <br/>
+
+    <input type="submit" value="Add Sensor" />
+</form>
+</body>
+</html>

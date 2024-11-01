@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sensor List</title>
+    <link rel="stylesheet" th:href="@{/styles_1.css}" />
+</head>
+<body>
+<!-- Table tp display all the headers for labels  -->
+<table>
+    <thead>
+    <tr>
+        <th>Sensor ID</th>
+        <th>Sensor Name</th>
+        <th>Sensor Type</th>
+        <th>Sensor Pin</th>
+        <th>Sensor Location</th>
+        <th>Sensor Status</th>
+        <!--add a header for any actions that the user can make -->
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <!--fill the table with database data-->
+    <tbody>
+    <tr th:each="sensor : ${sensors}">
+        <td th:text="${sensor.sensorID}">ID</td>
+        <td th:text="${sensor.sensorName}">Name</td>
+        <td th:text="${sensor.sensorType}">Type</td>
+        <td th:text="${sensor.sensorPin}">Pin</td>
+        <td th:text="${sensor.sensorLocation}">Location</td>
+        <td th:text="${sensor.sensorStatus}">Status</td>
+        <td>
+            <a th:href="@{/edit-sensor/{id}(id=${sensor.sensorID})}">Update</a>
+            <a th:href="@{/delete-sensor/{id}(id=${sensor.sensorID})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><a href="/add-sensor">Add a new Sensor</a></p>
+</body>
+</html>
