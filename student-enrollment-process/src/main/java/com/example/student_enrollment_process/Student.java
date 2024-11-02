@@ -33,7 +33,7 @@ public class Student {
     private String postalCode;
     private String technicalSkills;
 
-// Getters and Setters, so field data can be accessed
+// Getters and Setters, so field data can be accessed (remeber to always have this, if you need to access the data)
 
     public int getStudentId() {
         return studentId;

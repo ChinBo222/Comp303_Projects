@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    // Custom query method to find a student by username
+    // find by username
     Student findByUserName(String userName);
 }
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 public interface ProgramRepository extends JpaRepository<Program, String> {
     double findAmountByProgramCode(String programCode);
-    // Custom query methods can be defined here if needed
-    boolean existsById(String programCode); // This method should be there if you're checking for existence.
+    // Checks for existing studentid
+    boolean existsById(String programCode);
  
 }

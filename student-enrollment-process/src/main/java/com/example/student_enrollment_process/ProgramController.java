@@ -16,6 +16,7 @@ public class ProgramController {
     @Autowired
     private ProgramRepository programRepository;
 
+    //literally just pulls all the program information from the database
     @GetMapping("/programs")
     public String showPrograms(Model model) {
         List<Program> programs = programRepository.findAll();

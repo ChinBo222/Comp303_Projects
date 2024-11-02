@@ -19,6 +19,7 @@ public class EnrollmentController {
     @Autowired
     private StudentRepository studentRepository;
 
+    //logic for enrolling in a course
     @PostMapping("/enroll")
     public String enrollStudent(
             @RequestParam String programCode,
@@ -31,14 +32,18 @@ public class EnrollmentController {
         // Check if studentId is valid and program code exists
         if (studentId != null && programRepository.existsById(programCode)) {
             Enrollment enrollment = new Enrollment();
-            enrollment.setStudentId(studentId); // Set the student ID directly
-            enrollment.setProgramCode(programCode); // Set the program code directly
+            // Set the student ID directly
+            enrollment.setStudentId(studentId);
+            // Set the program code directly
+            enrollment.setProgramCode(programCode);
 
-            // Retrieve the program entity to get the fee
+            // Retrieve the program  to get the fee
             Program program = programRepository.findById(programCode).orElse(null);
             if (program != null) {
-                double amountPaid = program.getFee(); // Assuming you have a 'getFee()' method
+                //if the program does exist, then set amountpaid to the fee from the database
+                double amountPaid = program.getFee();
                 enrollment.setAmountPaid(amountPaid);
+                //set the start date of the program for today
                 enrollment.setStartDate(LocalDate.now().toString());
 
                 // Save the enrollment
@@ -49,16 +54,15 @@ public class EnrollmentController {
             model.addAttribute("enrollmentError", "Invalid program code or student not found.");
         }
 
-        // Redirect back to programs page after enrollment
-        return "welcome"; // Ensure this matches your HTML page name
+        // Redirect back to homepage page after enrollment
+        return "welcome";
     }
 
     private Integer getStudentIdFromUsername(String username) {
-        // Retrieve student based on the username
         Student student = studentRepository.findByUserName(username);
         if (student != null) {
-            return student.getStudentId(); // Get the student ID from the retrieved student object
+            return student.getStudentId();
         }
-        return null; // Return null if the student is not found
+        return null;
     }
 }

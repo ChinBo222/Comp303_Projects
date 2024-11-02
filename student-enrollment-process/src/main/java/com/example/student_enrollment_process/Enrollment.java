@@ -10,8 +10,8 @@ public class Enrollment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int applicationNo;
 
-    private int studentId; // Storing student ID directly
-    private String programCode; // Storing program code directly
+    private int studentId;
+    private String programCode;
 
     private String startDate;
     private double amountPaid;

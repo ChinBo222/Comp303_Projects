@@ -17,7 +17,10 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
-    // Display index as the registration page
+
+    //Registration logic:
+
+    // Display index as the registration page (mostly a landing page)
     @GetMapping("/")
     //Model parameter called displayFields passes the data from this controller to the index
     public String showForm(Model displayFields) {
@@ -26,7 +29,6 @@ public class StudentController {
         // Return the default view
         return "index";
     }
-
     //post request: when user inputs student information in registration field
     @PostMapping("/")
     //creates a method called regiesterStudent;
@@ -45,12 +47,15 @@ public class StudentController {
         return "index";
     }
 
+
+
+    //Login logic:
+
     @PostMapping("/login")
     public String loginStudent(String userName, String password, Model model) {
         Student student = studentRepository.findByUserName(userName);
-
         if (student == null || !student.getPassword().equals(password)) {
-            // Add an empty 'student' object, so that when the page reloads, it still has a the student package:
+            // Add an empty 'student' object, so that when the page reloads, it still has the student package:
             //explaination: the student item was added in the initial show form.
             //the post method to register a new student automatically grabs that object to update information.
             //However, when you go to log in, and in the case where u input the wrong info, that student object might not exist anymore
@@ -60,16 +65,19 @@ public class StudentController {
             return "index"; // Reloads index with an error message on login failure
         }
 
-        // Successful login
+        // Successful login, print message to welcome.html
         model.addAttribute("welcomeMessage", "Welcome, " + student.getFirstName() + "!");
         return "welcome"; // Redirects to the welcome page if login is successful
     }
 
+
+    //edit personal information logic:
     @GetMapping("/editStudent")
     public String editStudentForm(Model model) {
-        // You can add logic here to retrieve the student information if needed
-        model.addAttribute("student", new Student()); // Placeholder for now
-        return "editStudent"; // Returns the editStudent.html view
+        // Placeholder for now
+        model.addAttribute("student", new Student());
+        //directs user to the editStudent.html
+        return "editStudent";
     }
 
     @PostMapping("/updateStudent")
@@ -82,28 +90,28 @@ public class StudentController {
                                 @RequestParam("postalCode") String postalCode,
                                 Model model) {
 
-        // Find the student by username
+        // finds the user using their username
         Student student = studentRepository.findByUserName(userName);
-
+        //security feature to check inputed password. I dont knw how to actually make a proper set up.
         if (student == null || !student.getPassword().equals(password)) {
-            // If student not found or password doesn't match, return error message
+            // if either username or password are wrong, throw this error mesage
             model.addAttribute("errorMsg", "Invalid username or password. Please try again.");
-            return "editStudent"; // Return to editStudent page with error message
+            return "editStudent";
         }
 
-        // Update the existing student's information (but not the ID)
+        // Update the existing student's information (but not the studentID)
         student.setFirstName(firstName);
         student.setLastName(lastName);
         student.setAddress(address);
         student.setCity(city);
         student.setPostalCode(postalCode);
 
-        // Save the updated student information without changing the ID
+        // Save the updated information without changing the ID
         studentRepository.save(student);
 
-        // Add success message to the model
+        // Add success message
         model.addAttribute("successMsg", "Your information has been updated successfully.");
-        return "welcome"; // Redirect to the welcome page after successful update
+        return "welcome";
     }
 
 
