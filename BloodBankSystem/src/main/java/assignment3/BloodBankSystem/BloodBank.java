@@ -1,65 +1,24 @@
-package assignment3.BloodBankSystem;
+package assignment3.BloodBankSystem.model;
 
-public class BloodBank{
-    //List of private fields for BloodBank:
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "blood_banks")
+public class BloodBank {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String bloodbankName;
-    private String address;
-    private String city;
-    private String phone;
-    private String email;
 
-    //Getters and Setters:
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "name")
+    private String name;
 
-    public String getBloodbankName() {
-        return bloodbankName;
-    }
-    public void setBloodbankName(String bloodbankName) {
-        this.bloodbankName = bloodbankName;
-    }
+    @Column(name = "location")
+    private String location;
 
-    public String getAddress() {
-        return address;
-    }
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    @OneToMany(mappedBy = "bloodBank", cascade = CascadeType.ALL)
+    private List<BloodStock> bloodStocks;
 
-    public String getCity() {
-        return city;
-    }
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    //Constructor for BloodBank:
-    public BloodBank(Long id, String bloodbankName, String address, String City, String Phone, String Email){
-        this.id = id;
-        this.bloodbankName = bloodbankName;
-        this.address = address;
-        this.city = city;
-        this.phone = phone;
-        this.email = email;
-    }
-
+    // Getters and setters
 }

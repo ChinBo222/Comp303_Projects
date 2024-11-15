@@ -1,57 +1,31 @@
-package assignment3.BloodBankSystem;
-//Import dependencies:
+package assignment3.BloodBankSystem.model;
+
+import javax.persistence.*;
 import java.util.Date;
 
-public class BloodStock{
-    //List of private fields for BloodStock:
+@Entity
+@Table(name = "blood_stocks")
+public class BloodStock {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "blood_group")
     private String bloodGroup;
+
+    @Column(name = "quantity")
     private int quantity;
+
+    @Column(name = "best_before")
     private Date bestBefore;
+
+    @Column(name = "status")
     private String status;
 
-    //Getters and Setters:
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "blood_bank_id")
+    private BloodBank bloodBank;
 
-    public String getBloodGroup() {
-        return bloodGroup;
-    }
-    public void setBloodGroup(String bloodGroup) {
-        this.bloodGroup = bloodGroup;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Date getBestBefore() {
-        return bestBefore;
-    }
-    public void setBestBefore(Date bestBefore) {
-        this.bestBefore = bestBefore;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    //Constructor for BloodStock:
-    public BloodStock(Long id, String bloodGroup, int quantity, Date bestBefore, String status){
-        this.id = id;
-        this.bloodGroup = bloodGroup;
-        this.quantity = quantity;
-        this.bestBefore = bestBefore;
-        this.status = status;
-    }
+    // Getters and setters
 }
