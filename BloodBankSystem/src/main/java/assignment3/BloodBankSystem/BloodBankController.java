@@ -3,39 +3,45 @@ package assignment3.BloodBankSystem;
 // Import dependencies:
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@RequestMapping("/bloodbanks")
+@RequestMapping("/api/bloodbanks")
 public class BloodBankController {
 
-    private Map<Long, BloodBank> bloodBankMap = new HashMap<>();
-    private static long bloodBankIdCounter = 1;
+    // In-memory storage for blood banks
+    private Map<Long, Map<String, Object>> bloodBanks = new ConcurrentHashMap<>();
+    private long idCounter = 1;
 
-    // Create or update a blood bank
+    @GetMapping
+    public List<Map<String, Object>> getAllBloodBanks() {
+        return new ArrayList<>(bloodBanks.values());
+    }
+
+    @GetMapping("/{id}")
+    public Map<String, Object> getBloodBankById(@PathVariable Long id) {
+        return bloodBanks.get(id);
+    }
+
     @PostMapping
-    public BloodBank updateBloodBank(@RequestBody BloodBank bloodBank) { // Corrected method name
-        if (bloodBank.getId() == null) {
-            bloodBank.setId(bloodBankIdCounter++);
-        }
-        bloodBankMap.put(bloodBank.getId(), bloodBank);
+    public Map<String, Object> createBloodBank(@RequestBody Map<String, Object> bloodBank) {
+        bloodBank.put("id", idCounter++);
+        bloodBanks.put((Long) bloodBank.get("id"), bloodBank);
         return bloodBank;
     }
 
-    // Get all blood banks
-    @GetMapping
-    public List<BloodBank> getAllBloodBanks() {
-        return new ArrayList<>(bloodBankMap.values());
+    @PutMapping("/{id}")
+    public Map<String, Object> updateBloodBank(@PathVariable Long id, @RequestBody Map<String, Object> bloodBank) {
+        bloodBank.put("id", id);
+        bloodBanks.put(id, bloodBank);
+        return bloodBank;
     }
 
-    // Search by id
-    @GetMapping("/{id}")
-    public BloodBank getBloodBankById(@PathVariable Long id) {
-        return bloodBankMap.get(id);
-    }
-
-    // Delete blood bank
     @DeleteMapping("/{id}")
-    public boolean deleteBloodBank(@PathVariable Long id) {
-        return bloodBankMap.remove(id) != null;
+    public void deleteBloodBank(@PathVariable Long id) {
+        bloodBanks.remove(id);
     }
 }

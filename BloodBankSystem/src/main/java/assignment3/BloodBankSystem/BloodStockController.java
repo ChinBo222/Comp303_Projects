@@ -3,39 +3,45 @@ package assignment3.BloodBankSystem;
 // Import dependencies:
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@RequestMapping("/bloodstocks")
+@RequestMapping("/api/bloodstocks")
 public class BloodStockController {
 
-    private Map<Long, BloodStock> bloodStockMap = new HashMap<>();
-    private static long bloodStockIdCounter = 1;
+    // In-memory storage for blood stocks
+    private Map<Long, Map<String, Object>> bloodStocks = new ConcurrentHashMap<>();
+    private long idCounter = 1;
 
-    // Create or update blood stock
+    @GetMapping
+    public List<Map<String, Object>> getAllBloodStocks() {
+        return new ArrayList<>(bloodStocks.values());
+    }
+
+    @GetMapping("/{id}")
+    public Map<String, Object> getBloodStockById(@PathVariable Long id) {
+        return bloodStocks.get(id);
+    }
+
     @PostMapping
-    public BloodStock saveOrUpdateBloodStock(@RequestBody BloodStock bloodStock) {
-        if (bloodStock.getId() == null) {
-            bloodStock.setId(bloodStockIdCounter++);
-        }
-        bloodStockMap.put(bloodStock.getId(), bloodStock);
+    public Map<String, Object> createBloodStock(@RequestBody Map<String, Object> bloodStock) {
+        bloodStock.put("id", idCounter++);
+        bloodStocks.put((Long) bloodStock.get("id"), bloodStock);
         return bloodStock;
     }
 
-    // Get all blood stocks
-    @GetMapping
-    public List<BloodStock> getAllBloodStocks() {
-        return new ArrayList<>(bloodStockMap.values());
+    @PutMapping("/{id}")
+    public Map<String, Object> updateBloodStock(@PathVariable Long id, @RequestBody Map<String, Object> bloodStock) {
+        bloodStock.put("id", id);
+        bloodStocks.put(id, bloodStock);
+        return bloodStock;
     }
 
-    // Get a blood stock by ID
-    @GetMapping("/{id}")
-    public BloodStock getBloodStockById(@PathVariable Long id) {
-        return bloodStockMap.get(id);
-    }
-
-    // Delete a blood stock
     @DeleteMapping("/{id}")
-    public boolean deleteBloodStock(@PathVariable Long id) {
-        return bloodStockMap.remove(id) != null;
+    public void deleteBloodStock(@PathVariable Long id) {
+        bloodStocks.remove(id);
     }
 }

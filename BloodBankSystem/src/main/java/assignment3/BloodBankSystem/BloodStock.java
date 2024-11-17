@@ -1,31 +1,55 @@
-package assignment3.BloodBankSystem.model;
+package assignment3.BloodBankSystem;
 
-import javax.persistence.*;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "blood_stocks")
+import java.time.LocalDate;
+
 public class BloodStock {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "blood_group")
     private String bloodGroup;
-
-    @Column(name = "quantity")
     private int quantity;
-
-    @Column(name = "best_before")
-    private Date bestBefore;
-
-    @Column(name = "status")
+    private LocalDate bestBefore;
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "blood_bank_id")
-    private BloodBank bloodBank;
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    // Getters and setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public LocalDate getBestBefore() {
+        return bestBefore;
+    }
+
+    public void setBestBefore(LocalDate bestBefore) {
+        this.bestBefore = bestBefore;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
