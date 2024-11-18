@@ -12,20 +12,23 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping("/api/bloodstocks")
 public class BloodStockController {
 
-    // In-memory storage for blood stocks
+    //Creates map for bloodstocks
     private Map<Long, Map<String, Object>> bloodStocks = new ConcurrentHashMap<>();
     private long idCounter = 1;
 
+    //get request for list of all bloodstocks
     @GetMapping
     public List<Map<String, Object>> getAllBloodStocks() {
         return new ArrayList<>(bloodStocks.values());
     }
 
+    //get request for specific bloodstock by id
     @GetMapping("/{id}")
     public Map<String, Object> getBloodStockById(@PathVariable Long id) {
         return bloodStocks.get(id);
     }
 
+    //post request to add new bloodstock information
     @PostMapping
     public Map<String, Object> createBloodStock(@RequestBody Map<String, Object> bloodStock) {
         bloodStock.put("id", idCounter++);
@@ -33,6 +36,7 @@ public class BloodStockController {
         return bloodStock;
     }
 
+    //put request to update bloodstock info
     @PutMapping("/{id}")
     public Map<String, Object> updateBloodStock(@PathVariable Long id, @RequestBody Map<String, Object> bloodStock) {
         bloodStock.put("id", id);
@@ -40,6 +44,7 @@ public class BloodStockController {
         return bloodStock;
     }
 
+    //delete a bloodstock
     @DeleteMapping("/{id}")
     public void deleteBloodStock(@PathVariable Long id) {
         bloodStocks.remove(id);

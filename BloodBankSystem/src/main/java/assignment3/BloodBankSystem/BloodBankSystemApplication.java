@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BloodBankSystemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BloodBankSystemApplication.class, args); //print message so I know it's actually running
+		SpringApplication.run(BloodBankSystemApplication.class, args);
+		//print message so I know it's actually running
 
 		System.out.println("SpringBoot is running on localhost:8083");
 
