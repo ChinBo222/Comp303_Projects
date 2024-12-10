@@ -1,6 +1,9 @@
 package assignment3.BloodBankSystem;
 
 // Import dependencies:
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.ArrayList;
@@ -11,42 +14,60 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @RequestMapping("/api/bloodstocks")
 public class BloodStockController {
+    @Autowired
+    private BloodStockRepository bloodStockRepository;
 
-    //Creates map for bloodstocks
-    private Map<Long, Map<String, Object>> bloodStocks = new ConcurrentHashMap<>();
-    private long idCounter = 1;
-
-    //get request for list of all bloodstocks
+    // Get all blood stocks
     @GetMapping
-    public List<Map<String, Object>> getAllBloodStocks() {
-        return new ArrayList<>(bloodStocks.values());
+    public List<BloodStock> getAllBloodStocks() {
+        return bloodStockRepository.findAll();
     }
 
-    //get request for specific bloodstock by id
+    // Get a specific blood stock by ID
     @GetMapping("/{id}")
-    public Map<String, Object> getBloodStockById(@PathVariable Long id) {
-        return bloodStocks.get(id);
+    public BloodStock getBloodStockById(@PathVariable String id) {
+        Optional<BloodStock> bloodStock = bloodStockRepository.findById(id);
+        return bloodStock.orElse(null);  // Return null if not found
     }
 
-    //post request to add new bloodstock information
+    // Create a new blood stock
     @PostMapping
-    public Map<String, Object> createBloodStock(@RequestBody Map<String, Object> bloodStock) {
-        bloodStock.put("id", idCounter++);
-        bloodStocks.put((Long) bloodStock.get("id"), bloodStock);
-        return bloodStock;
+    public BloodStock createBloodStock(@RequestBody BloodStock bloodStock) {
+        return bloodStockRepository.save(bloodStock);
     }
 
-    //put request to update bloodstock info
+    // Update an existing blood stock
     @PutMapping("/{id}")
-    public Map<String, Object> updateBloodStock(@PathVariable Long id, @RequestBody Map<String, Object> bloodStock) {
-        bloodStock.put("id", id);
-        bloodStocks.put(id, bloodStock);
-        return bloodStock;
+    public BloodStock updateBloodStock(@PathVariable String id, @RequestBody BloodStock bloodStock) {
+        bloodStock.setId(id);
+        return bloodStockRepository.save(bloodStock);
     }
 
-    //delete a bloodstock
+    // Delete a blood stock
     @DeleteMapping("/{id}")
-    public void deleteBloodStock(@PathVariable Long id) {
-        bloodStocks.remove(id);
+    public void deleteBloodStock(@PathVariable String id) {
+        bloodStockRepository.deleteById(id);
     }
+
+    // Check blood availability
+    @GetMapping("/availability/{bloodGroup}")
+    public ResponseEntity<Map<String, Object>> checkBloodAvailability(@PathVariable String bloodGroup) {
+        List<BloodStock> bloodStocks = bloodStockRepository.findByBloodGroup(bloodGroup);
+        Map<String, Object> response = new HashMap<>();
+
+        if (bloodStocks.isEmpty()) {
+            response.put("message", "Blood group " + bloodGroup + " is not available.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        int totalQuantity = bloodStocks.stream().mapToInt(BloodStock::getQuantity).sum();
+        response.put("bloodGroup", bloodGroup);
+        response.put("quantity", totalQuantity);
+        response.put("status", "Available");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
 }

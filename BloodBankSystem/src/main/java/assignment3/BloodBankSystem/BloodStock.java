@@ -4,10 +4,13 @@ package assignment3.BloodBankSystem;
 import java.util.Date;
 
 import java.time.LocalDate;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "bloodstock")
 
 public class BloodStock {
     //Private fields for Blood Stock
-    private Long id;
+    private String id;
     private String bloodGroup;
     private int quantity;
     private LocalDate bestBefore;
@@ -15,10 +18,10 @@ public class BloodStock {
 
     // Getters and Setters for Blood Stock
     //Id
-    public Long getId() {
+    public String getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

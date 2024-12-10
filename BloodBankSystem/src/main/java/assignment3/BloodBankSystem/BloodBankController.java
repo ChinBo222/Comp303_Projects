@@ -1,6 +1,7 @@
 package assignment3.BloodBankSystem;
 
 // Import dependencies:
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.ArrayList;
@@ -12,41 +13,38 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping("/api/bloodbanks")
 public class BloodBankController {
 
-    //Creates a map to store bloodbank information
-    private Map<Long, Map<String, Object>> bloodBanks = new ConcurrentHashMap<>();
-    private long idCounter = 1;
+    @Autowired
+    private BloodBankRepository bloodBankRepository;
 
-    //Get request to give list of bloodbanks
+    // Get all blood banks
     @GetMapping
-    public List<Map<String, Object>> getAllBloodBanks() {
-        return new ArrayList<>(bloodBanks.values());
+    public List<BloodBank> getAllBloodBanks() {
+        return bloodBankRepository.findAll();
     }
 
-    //Get request to search bloodbank by id
+    // Get a specific blood bank by ID
     @GetMapping("/{id}")
-    public Map<String, Object> getBloodBankById(@PathVariable Long id) {
-        return bloodBanks.get(id);
+    public BloodBank getBloodBankById(@PathVariable String id) {
+        Optional<BloodBank> bloodBank = bloodBankRepository.findById(id);
+        return bloodBank.orElse(null);  // Return null if not found
     }
 
-    //post request to create new bloodbank
+    // Create a new blood bank
     @PostMapping
-    public Map<String, Object> createBloodBank(@RequestBody Map<String, Object> bloodBank) {
-        bloodBank.put("id", idCounter++);
-        bloodBanks.put((Long) bloodBank.get("id"), bloodBank);
-        return bloodBank;
+    public BloodBank createBloodBank(@RequestBody BloodBank bloodBank) {
+        return bloodBankRepository.save(bloodBank);
     }
 
-    //put request to update bloodbank by id
+    // Update an existing blood bank
     @PutMapping("/{id}")
-    public Map<String, Object> updateBloodBank(@PathVariable Long id, @RequestBody Map<String, Object> bloodBank) {
-        bloodBank.put("id", id);
-        bloodBanks.put(id, bloodBank);
-        return bloodBank;
+    public BloodBank updateBloodBank(@PathVariable String id, @RequestBody BloodBank bloodBank) {
+        bloodBank.setId(id);
+        return bloodBankRepository.save(bloodBank);
     }
 
-    //deletes a bloodbank
+    // Delete a blood bank
     @DeleteMapping("/{id}")
-    public void deleteBloodBank(@PathVariable Long id) {
-        bloodBanks.remove(id);
+    public void deleteBloodBank(@PathVariable String id) {
+        bloodBankRepository.deleteById(id);
     }
 }

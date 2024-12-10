@@ -1,22 +1,28 @@
 package assignment3.BloodBankSystem;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Patient {
+import java.util.List;
+
+@Document(collection = "donor")
+public class Donor {
     //Private Fields for Patient
-    private Long id;
+    private String id;
     private String firstName;
     private String lastName;
     private int age;
     private String bloodGroup;
     private String city;
     private String phone;
-
+    private List<BloodStock> donations;
+    private String email;
+    private String password;
     // Getters and Setters for Patient
 
     //id
-    public Long getId() {
+    public String getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,5 +72,28 @@ public class Patient {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+
+    public List<BloodStock> getDonations() {
+        return donations;
+    }
+    public void setDonations(List<BloodStock> donations) {
+        this.donations = donations;
+    }
+
+    //login info:
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -1,9 +1,11 @@
 package assignment3.BloodBankSystem;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "bloodbank")
 
 public class BloodBank {
     //Private fields for BloodBank
-    private Long id;
+    private String id;
     private String bloodBankName;
     private String address;
     private String city;
@@ -13,10 +15,10 @@ public class BloodBank {
     // Getters and Setters for BloodBank so data can be accessed:
 
     //ID
-    public Long getId() {
+    public String getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
