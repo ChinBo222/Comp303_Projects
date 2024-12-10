@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function DonorLogin() {
+function DonorLogin({ setIsLoggedIn }) {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -10,7 +12,7 @@ function DonorLogin() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+    
         fetch("http://localhost:8083/api/donors/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -26,6 +28,15 @@ function DonorLogin() {
             .then((data) => {
                 console.log("Login Successful:", data);
                 alert("Login Successful!");
+
+                // Store donor ID in localStorage
+                localStorage.setItem("donorId", data.id);
+
+                // Update the state to reflect the user is logged in
+                setIsLoggedIn(true);
+
+                // Redirect to the home page after login
+                navigate("/home");
             })
             .catch((error) => {
                 console.error("Login Failed:", error);

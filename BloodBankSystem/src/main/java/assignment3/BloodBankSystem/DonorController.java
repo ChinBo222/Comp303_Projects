@@ -37,12 +37,7 @@ public class DonorController {
         return donorRepository.save(donor);
     }
 
-    // Update an existing patient
-    @PutMapping("/{id}")
-    public Donor updateDonor(@PathVariable String id, @RequestBody Donor donor) {
-        donor.setId(id);
-        return donorRepository.save(donor);
-    }
+
 
     // Delete a patient
     @DeleteMapping("/{id}")
@@ -67,6 +62,27 @@ public class DonorController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateDonor(@PathVariable String id, @RequestBody Donor donorDetails) {
+        Optional<Donor> donor = donorRepository.findById(id);
+        if (donor.isPresent()) {
+            Donor existingDonor = donor.get();
+            existingDonor.setFirstName(donorDetails.getFirstName());
+            existingDonor.setLastName(donorDetails.getLastName());
+            existingDonor.setAge(donorDetails.getAge());
+            existingDonor.setBloodGroup(donorDetails.getBloodGroup());
+            existingDonor.setCity(donorDetails.getCity());
+            existingDonor.setPhone(donorDetails.getPhone());
+            existingDonor.setEmail(donorDetails.getEmail());
+            donorRepository.save(existingDonor); // Save the updated donor
+
+            return ResponseEntity.ok(existingDonor);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Donor not found");
+        }
+    }
+
 
 
 }
